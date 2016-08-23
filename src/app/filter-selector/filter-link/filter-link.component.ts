@@ -11,9 +11,15 @@ import { Action, SetVisibilityFilter } from '../../shared/actions/';
     moduleId: module.id,
     selector: 'filter-link',
     styles: [
-      `div {
+      `
+      div {
         cursor: pointer;
-      }`
+      }
+      
+      div:hover {
+        font-weight: bold;
+      }
+      `
     ],
     template: `
         <div (click)="setVisibilityFilter()" [style.text-decoration]="textEffect | async"> {{ filter }} </div>

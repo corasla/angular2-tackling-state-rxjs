@@ -13,13 +13,22 @@ import { AppState, stateAndDispatcher, state } from '../../shared/';
     }
 
     div:hover {
-      color: #ffffff;
-      background: #000000;
+      color: #6699ff;
+    }
+
+    .is-completed {
+      text-decoration: line-through;
+      color: #ff9966;
+    }
+
+    .is-completed:hover {
+      font-weight: bold;
+      color: #ff9966;
     }
     `
   ],
   template: `
-    <div [style.text-decoration]="textEffect" (click)="clicked()"> {{id}}. {{ text }} </div>
+    <div [class.is-completed]="completed" (click)="clicked()"> {{id}}. {{ text }} </div>
   `,
 })
 export class TodoComponent {
@@ -33,8 +42,4 @@ export class TodoComponent {
   public clicked(): void {
     this.toggle.emit({id: this.id});
   }
-
-  public get textEffect() { 
-    return this.completed === true ? 'line-through' : 'none'; 
-  } 
 }

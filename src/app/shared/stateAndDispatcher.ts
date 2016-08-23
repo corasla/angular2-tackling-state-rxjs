@@ -9,10 +9,6 @@ import 'rxjs/add/operator/scan';
 
 import { Action, ToggleTodoAction, SetVisibilityFilter, AddTodoAction } from './actions/';
 
-export const initState = new OpaqueToken('initState');
-export const dispatcher = new OpaqueToken('dispatcher');
-export const state = new OpaqueToken('state');
-
 export class ToDoItem {
   constructor(public id: number, public text: string, public completed: boolean = false) {}
 }
@@ -23,28 +19,37 @@ export class AppState {
   constructor() {}
 }
 
+export const initState = new OpaqueToken('initState');
+export const dispatcher = new OpaqueToken('dispatcher');
+export const state = new OpaqueToken('state');
+
 export const stateAndDispatcher = [
   {
-     provide: initState, 
-     useValue: {todos: [], visibilityFilter: 'SHOW_ACTIVE'}
+      provide: initState, 
+      useValue: {todos: [
+        new ToDoItem(0, 'Eenie', false),
+        new ToDoItem(1, 'Meenie', false),
+        new ToDoItem(2, 'Minie', true),
+        new ToDoItem(3, 'Mo', false),
+        ], visibilityFilter: 'SHOW_ALL'}
   }, 
   {
-    provide: dispatcher, 
-    useValue: new Subject<Action>(null)
+      provide: dispatcher, 
+      useValue: new Subject<Action>(null)
   }, 
   {
-    provide: state,
-    useFactory: stateFn,
-    deps: [initState, dispatcher]
+      provide: state,
+      useFactory: stateFn,
+      deps: [initState, dispatcher]
   }
 ];
 
 function stateFn(initState: AppState, actions: Observable<Action>): Observable<AppState> { 
   const combine = s => ({todos: s[0], visibilityFilter: s[1]});
   const appStateObs: Observable<AppState> = 
-    todos(initState.todos, actions).   
-        zip(filter(initState.visibilityFilter, actions)).
-        map(combine); 
+    todos(initState.todos, actions)   
+        .zip(filter(initState.visibilityFilter, actions))
+        .map(combine); 
   return wrapIntoBehavior(initState, appStateObs); 
 }
 
@@ -55,7 +60,6 @@ function wrapIntoBehavior(init, obs) {
 }
 
 function todos(initState: any, actions: Observable<Action>): Observable<ToDoItem> { 
-// function todos(initState: Todo[], actions: Observable<Action>): Observable<ToDo> { 
     return actions.scan((state, action) => { 
       if (action instanceof AddTodoAction) { 
         const newTodo = {
@@ -70,11 +74,8 @@ function todos(initState: any, actions: Observable<Action>): Observable<ToDoItem
     }, initState); 
 } 
 
-function updateTodo(todo: ToDoItem, action: Action): ToDoItem { 
-  if (action instanceof ToggleTodoAction) { 
-    // merge creates a new object using 
-    // the properties of the passed in objects 
-    console.log('woot? -> ', action.id, todo.id);
+function updateTodo(todo: ToDoItem, action: Action): ToDoItem {
+  if (action instanceof ToggleTodoAction) {  
     return (action.id !== todo.id) ? todo : merge(todo, {completed: !todo.completed}); 
   } else { 
     return todo; 
