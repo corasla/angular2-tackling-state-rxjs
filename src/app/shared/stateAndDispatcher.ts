@@ -3,41 +3,29 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { Action, ToggleTodoAction, SetVisibilityFilter, AddTodoAction } from './actions';
+
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/scan';
 
-const initState = new OpaqueToken('initState');
-const dispatcher = new OpaqueToken('dispatcher');
-const state = new OpaqueToken('state');
+export const initState = new OpaqueToken('initState');
+export const dispatcher = new OpaqueToken('dispatcher');
+export const state = new OpaqueToken('state');
 
-class AddTodoAction { 
-  constructor(public todoId: number, public text: string){} 
-} 
-
-class ToggleTodoAction { 
-  constructor(public id: number){} 
-} 
-
-class SetVisibilityFilter { 
-  constructor(public filter: string){} 
-}
-
-class ToDoItem {
+export class ToDoItem {
   constructor(public id: number, public text: string, public completed: boolean = false) {
     console.log('created on nois todo -> ', this.text, this.id);
   }
 }
 
-class AppState {
-  public todos: any;
-  public visibilityFilter: any;
+export class AppState {
+  public todos: Array<ToDoItem>;
+  public visibilityFilter;
   constructor() {
     console.log('inited!');
   }
 }
-
-type Action = AddTodoAction | ToggleTodoAction | SetVisibilityFilter;
 
 export const stateAndDispatcher = [
   {
@@ -59,8 +47,8 @@ function stateFn(initState: AppState, actions: Observable<Action>): Observable<A
   const combine = s => ({todos: s[0], visibilityFilter: s[1]});
   const appStateObs: Observable<AppState> = 
     todos(initState.todos, actions).   
-    zip(filter(initState.visibilityFilter, actions)).
-    map(combine); 
+        zip(filter(initState.visibilityFilter, actions)).
+        map(combine); 
   return wrapIntoBehavior(initState, appStateObs); 
 }
 
@@ -107,6 +95,6 @@ function filter(initState: string, actions: Observable<Action>): Observable<stri
    }, initState); 
 }
 
-function merge(todo: ToDoItem, props: any) {
+function merge(todo: ToDoItem, props: any): any {
   return todo;
 }
