@@ -10,7 +10,11 @@ import { TodoComponent } from '../todo/todo.component';
 @Component({
     selector: 'todo-list',
     template: `
-        <todo *ngFor="let t of filtered | async"></todo>
+        <todo *ngFor="let t of filtered | async" 
+                [text]="t.text" 
+                [completed]="t.completed"
+                [id]="t.id"
+                (toggle)="emitToggle($event)"></todo>
     `,
     directives: [TodoComponent],
     providers: stateAndDispatcher
@@ -50,7 +54,7 @@ export class TodoList {
         return items;
     }
 
-    emitToggle(id) {
-        this.dispatcher.next(new ToggleTodoAction(id));
+    emitToggle(data) {
+        this.dispatcher.next(new ToggleTodoAction(data.id));
     }
 }

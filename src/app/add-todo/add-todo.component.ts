@@ -4,7 +4,7 @@ import { Observer } from 'rxjs/Observer';
 @Component({
     selector: 'add-todo',
     template: `
-        <input #val>
+        <input #val (keydown.Enter)="addTodo(val.value)">
         <button (click)="addTodo(val.value)">Add Todo</button>
     `,
     providers: stateAndDispatcher
@@ -14,7 +14,6 @@ export class AddTodoComponent {
     constructor(@Inject(dispatcher) private dispatcher: Observer<Action>) {}
 
     addTodo(value: string): void {
-        console.log('adding -> ', value, this.nextId);
         this.dispatcher.next(new AddTodoAction(this.nextId++, value));
     }
 }

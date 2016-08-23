@@ -30,7 +30,7 @@ export class AppState {
 export const stateAndDispatcher = [
   {
      provide: initState, 
-     useValue: {todos: [], visibilityFilter: 'SHOW_ALL'}
+     useValue: {todos: [], visibilityFilter: 'SHOW_ACTIVE'}
   }, 
   {
     provide: dispatcher, 
@@ -78,8 +78,7 @@ function updateTodo(todo: ToDoItem, action: Action): ToDoItem {
   if (action instanceof ToggleTodoAction) { 
     // merge creates a new object using 
     // the properties of the passed in objects 
-    return (action.id !== todo.id) ? 
-      todo : merge(todo, {completed: !todo.completed}); 
+    return (action.id !== todo.id) ? todo : merge(todo, {completed: !todo.completed}); 
   } else { 
     return todo; 
   } 
@@ -96,5 +95,5 @@ function filter(initState: string, actions: Observable<Action>): Observable<stri
 }
 
 function merge(todo: ToDoItem, props: any): any {
-  return todo;
+  return Object.assign({}, todo, props);
 }
