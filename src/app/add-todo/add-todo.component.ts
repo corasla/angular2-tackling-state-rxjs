@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
 import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
 
-import { stateAndDispatcher, dispatcher, Action, AddTodoAction } from '../shared/';
+import { stateAndDispatcher, dispatcher, state, AppState, Action, AddTodoAction } from '../shared/';
 
 @Component({
     selector: 'add-todo',
@@ -16,12 +17,17 @@ export class AddTodoComponent implements OnInit {
     private nextId: number = 0;
     private text: string;
 
-    constructor(@Inject(dispatcher) private dispatcher: Observer<Action>) {
+    constructor(
+        @Inject(state) private state: Observable<AppState>,
+        @Inject(dispatcher) private dispatcher: Observer<Action>) {
         // nothing to do here
     }
 
     public ngOnInit(): void {
         this.resetText();
+        this.state.forEach(s => {
+            this.nextId = s.todos.length;
+        }); 
     }
 
     public get isTextEmpty(): boolean {
