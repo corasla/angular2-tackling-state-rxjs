@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 
 import { AppState, stateAndDispatcher, state, dispatcher } from '../../shared/';
 import { Action, SetVisibilityFilter } from '../../shared/actions/';
-import { TodoComponent } from '../../todo/';
 
 @Component({
     moduleId: module.id,
@@ -19,7 +18,6 @@ import { TodoComponent } from '../../todo/';
     template: `
         <div (click)="setVisibilityFilter()" [style.text-decoration]="textEffect | async"> {{ filter }} </div>
     `,
-    directives: [TodoComponent],
 })
 export class FilterLink { 
   @Input() public filter: string; 

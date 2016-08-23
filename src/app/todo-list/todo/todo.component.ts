@@ -2,7 +2,7 @@ import { Component, Input, Output, Inject, EventEmitter } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 
-import { AppState, stateAndDispatcher, state } from '../shared/';
+import { AppState, stateAndDispatcher, state } from '../../shared/';
 
 @Component({
   selector: 'todo',

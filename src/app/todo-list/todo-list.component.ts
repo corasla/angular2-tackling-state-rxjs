@@ -5,8 +5,8 @@ import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
 
 import { AppState, stateAndDispatcher, state, dispatcher, ToDoItem } from '../shared/stateAndDispatcher';
-import { Action, ToggleTodoAction } from '../shared/actions';
-import { TodoComponent } from '../todo/todo.component';
+import { Action, ToggleTodoAction } from '../shared/actions/';
+import { TodoComponent } from './todo/';
 
 @Component({
     selector: 'todo-list',

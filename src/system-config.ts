@@ -36,7 +36,7 @@ const barrels: string[] = [
   // App specific barrels.
   'app',
   'app/shared',
-  'app/todo',
+  'app/todo-list/todo',
   'app/todo-list',
   'app/add-todo',
   'app/filter-selector',
