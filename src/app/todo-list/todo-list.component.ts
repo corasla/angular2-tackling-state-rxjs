@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { AppState, stateAndDispatcher, state, dispatcher, ToDoItem } from '../shared/stateAndDispatcher';
-import { Action, ToggleTodoAction } from '../shared/actions';
+
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
-import { TodoComponent } from '../todo/todo.component';
 
+import { AppState, stateAndDispatcher, state, dispatcher, ToDoItem } from '../shared/stateAndDispatcher';
+import { Action, ToggleTodoAction } from '../shared/actions';
+import { TodoComponent } from '../todo/todo.component';
 
 @Component({
     selector: 'todo-list',
@@ -14,18 +15,23 @@ import { TodoComponent } from '../todo/todo.component';
                 [text]="t.text" 
                 [completed]="t.completed"
                 [id]="t.id"
-                (toggle)="emitToggle($event)"></todo>
+                (toggle)="emitToggle($event)">
+        </todo>
     `,
     directives: [TodoComponent],
-    providers: stateAndDispatcher
 })
 export class TodoList {
     constructor(@Inject(state) private state: Observable<AppState>,
                 @Inject(dispatcher) private dispatcher: Observer<Action>) {
     }
 
-    get filtered() {
+    public get filtered() {
         return this.state.map(s => this.getVisibleTodos(s.todos, s.visibilityFilter));
+    }
+
+    public emitToggle(data) {
+        const action: ToggleTodoAction = new ToggleTodoAction(data.id);
+        this.dispatcher.next(action);
     }
 
     private getVisibleTodos(todoList: Array<ToDoItem>, visibilityFilter: string): Array<ToDoItem> {
@@ -52,9 +58,5 @@ export class TodoList {
         });
 
         return items;
-    }
-
-    emitToggle(data) {
-        this.dispatcher.next(new ToggleTodoAction(data.id));
     }
 }

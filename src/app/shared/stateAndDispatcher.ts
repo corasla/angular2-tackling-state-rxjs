@@ -1,30 +1,26 @@
 import { OpaqueToken } from '@angular/core';
+
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
-import { Action, ToggleTodoAction, SetVisibilityFilter, AddTodoAction } from './actions';
-
 import 'rxjs/add/operator/zip';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/scan';
+
+import { Action, ToggleTodoAction, SetVisibilityFilter, AddTodoAction } from './actions/';
 
 export const initState = new OpaqueToken('initState');
 export const dispatcher = new OpaqueToken('dispatcher');
 export const state = new OpaqueToken('state');
 
 export class ToDoItem {
-  constructor(public id: number, public text: string, public completed: boolean = false) {
-    console.log('created on nois todo -> ', this.text, this.id);
-  }
+  constructor(public id: number, public text: string, public completed: boolean = false) {}
 }
 
 export class AppState {
   public todos: Array<ToDoItem>;
   public visibilityFilter;
-  constructor() {
-    console.log('inited!');
-  }
+  constructor() {}
 }
 
 export const stateAndDispatcher = [
@@ -78,6 +74,7 @@ function updateTodo(todo: ToDoItem, action: Action): ToDoItem {
   if (action instanceof ToggleTodoAction) { 
     // merge creates a new object using 
     // the properties of the passed in objects 
+    console.log('woot? -> ', action.id, todo.id);
     return (action.id !== todo.id) ? todo : merge(todo, {completed: !todo.completed}); 
   } else { 
     return todo; 

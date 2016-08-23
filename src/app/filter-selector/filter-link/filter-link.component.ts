@@ -1,11 +1,12 @@
 import { Component, Inject, Input } from '@angular/core';
-import { AppState, stateAndDispatcher, state, dispatcher } from '../shared/stateAndDispatcher';
-import { Action, SetVisibilityFilter } from '../shared/actions';
+
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import 'rxjs/add/operator/map';
-import { TodoComponent } from '../todo/todo.component';
 
+import { AppState, stateAndDispatcher, state, dispatcher } from '../../shared/';
+import { Action, SetVisibilityFilter } from '../../shared/actions/';
+import { TodoComponent } from '../../todo/';
 
 @Component({
     moduleId: module.id,
@@ -21,18 +22,21 @@ import { TodoComponent } from '../todo/todo.component';
     directives: [TodoComponent],
 })
 export class FilterLink { 
-  @Input() filter: string; 
+  @Input() public filter: string; 
 
-  constructor(
-    @Inject(dispatcher) private dispatcher: Observer<Action>, 
-    @Inject(state) private state: Observable<AppState>){} 
+  constructor(@Inject(dispatcher) private dispatcher: Observer<Action>, 
+              @Inject(state) private state: Observable<AppState>) {
+        // nothing to do here
+    } 
 
-  get textEffect() { 
+  public get textEffect() { 
     return this.state.map(s => 
       s.visibilityFilter === this.filter ? 'underline' : 'none'); 
   } 
 
-  setVisibilityFilter() { 
-    this.dispatcher.next(new SetVisibilityFilter(this.filter)); 
+  public setVisibilityFilter() {
+    const action: SetVisibilityFilter = new SetVisibilityFilter(this.filter);
+
+    this.dispatcher.next(action); 
   } 
 } 

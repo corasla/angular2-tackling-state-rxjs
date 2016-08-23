@@ -1,7 +1,8 @@
 import { Component, Input, Output, Inject, EventEmitter } from '@angular/core';
 
-import { AppState, stateAndDispatcher, state } from '../shared/stateAndDispatcher';
 import { Observable } from 'rxjs/Observable';
+
+import { AppState, stateAndDispatcher, state } from '../shared/';
 
 @Component({
   selector: 'todo',
@@ -12,13 +13,14 @@ import { Observable } from 'rxjs/Observable';
     }
 
     div:hover {
-      text-decoration: underline;
+      color: #ffffff;
+      background: #000000;
     }
     `
   ],
   template: `
     <div [style.text-decoration]="textEffect" (click)="clicked()"> {{id}}. {{ text }} </div>
-  `
+  `,
 })
 export class TodoComponent {
   @Input() text: string;
@@ -26,15 +28,13 @@ export class TodoComponent {
   @Input() id: number;
   @Output() toggle = new EventEmitter();
   
-  constructor(@Inject(state) private state: Observable<AppState>) {
-  }
+  constructor(@Inject(state) private state: Observable<AppState>) {}
 
   public clicked(): void {
-    console.log('gonna send -> ', this.id);
     this.toggle.emit({id: this.id});
   }
 
-  get textEffect() { 
+  public get textEffect() { 
     return this.completed === true ? 'line-through' : 'none'; 
   } 
 }
