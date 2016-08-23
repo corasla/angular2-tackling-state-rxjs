@@ -23,15 +23,19 @@ export const initState = new OpaqueToken('initState');
 export const dispatcher = new OpaqueToken('dispatcher');
 export const state = new OpaqueToken('state');
 
+// this is what is actually injected in the app component when using 'providers: stateAndDispatcher'
 export const stateAndDispatcher = [
   {
       provide: initState, 
-      useValue: {todos: [
-        new ToDoItem(0, 'Eenie', false),
-        new ToDoItem(1, 'Meenie', false),
-        new ToDoItem(2, 'Minie', true),
-        new ToDoItem(3, 'Mo', false),
-        ], visibilityFilter: 'SHOW_ALL'}
+      useValue: {
+        todos: [ //add some default values, ey?
+                new ToDoItem(0, 'Eeny', false),
+                new ToDoItem(1, 'Meeny', false),
+                new ToDoItem(2, 'Miny', true),
+                new ToDoItem(3, 'Moe', false),
+                ], 
+        visibilityFilter: 'SHOW_ALL'
+      }
   }, 
   {
       provide: dispatcher, 
